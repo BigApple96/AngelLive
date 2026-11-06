@@ -29,13 +29,18 @@ def signing_certificate(output):
     return digests.pop()
 
 
+def select_build_tools(sdk):
+    candidates = [p for p in (Path(sdk) / 'build-tools').glob('*') if re.fullmatch(r'\d+(\.\d+)+', p.name)]
+    if not candidates:
+        raise RuntimeError('Android SDK build-tools missing; configure ANDROID_HOME or sdkPath')
+    pinned = Path(sdk) / 'build-tools/36.0.0'
+    return pinned if pinned in candidates else max(candidates, key=lambda p: tuple(map(int, p.name.split('.'))))
+
+
 def inspect(apk, sdk=None):
     apk = Path(apk).resolve()
     sdk = Path(sdk or os.environ.get('ANDROID_HOME') or os.environ.get('ANDROID_SDK_ROOT') or '')
-    candidates = [p for p in (sdk / 'build-tools').glob('*') if re.fullmatch(r'\d+(\.\d+)+', p.name)]
-    if not candidates:
-        raise RuntimeError('Android SDK build-tools missing; configure ANDROID_HOME or sdkPath')
-    tools = max(candidates, key=lambda p: tuple(map(int, p.name.split('.'))))
+    tools = select_build_tools(sdk)
     win = os.name == 'nt'
     badging = command([tools / ('aapt2.exe' if win else 'aapt2'), 'dump', 'badging', apk])
     signing = command([tools / ('apksigner.bat' if win else 'apksigner'), 'verify', '--print-certs', apk])
@@ -45,7 +50,12 @@ def inspect(apk, sdk=None):
         if not match:
             raise RuntimeError('Required APK metadata is missing')
         return match.group(1)
-    certificate = signing_certificate(signing)
+    try:
+        certificate = signing_certificate(signing)
+    except RuntimeError as error:
+        # Certificate digests are public; omit subject names from diagnostics.
+        digest_lines = [line for line in signing.splitlines() if 'digest' in line.lower()]
+        raise RuntimeError(f'{error}; build-tools={tools.name}; digest output={digest_lines!r}') from error
     with zipfile.ZipFile(apk) as archive:
         if archive.testzip():
             raise RuntimeError('APK ZIP CRC failed')

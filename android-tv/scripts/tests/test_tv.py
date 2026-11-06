@@ -14,6 +14,13 @@ import verify_apk
 
 
 class SigningToolContract(unittest.TestCase):
+    def test_locked_tools_take_priority_over_newer_runner_installations(self):
+        with tempfile.TemporaryDirectory() as temp:
+            sdk = Path(temp)
+            for version in ['35.0.0', '36.0.0', '37.0.0']:
+                (sdk / 'build-tools' / version).mkdir(parents=True)
+            self.assertEqual(verify_apk.select_build_tools(sdk).name, '36.0.0')
+
     def test_numbered_and_sdk_range_signer_formats_are_supported(self):
         for label in ['Signer #1', 'Signer (minSdkVersion=24, maxSdkVersion=2147483647)']:
             with self.subTest(label=label):
