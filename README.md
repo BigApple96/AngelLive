@@ -39,6 +39,8 @@ PackyCode 是一家稳定、高效的 API 中转服务商，提供 Claude Code�
 
 ## 支持平台
 
+本 fork 另含独立的 **Android TV 兼容客户端（测试版）**，入口见 [安卓 TV 构建与家庭 AI 安装调试](android-tv/README.md)。GitHub Actions 可生成 ARM32/ARM64 APK；家中电脑可按模块内 AGENTS.md 使用 ADB 安装与取证。
+
 **iOS 17+ · macOS 15+ · tvOS 17+**
 
 适配 26 系列系统与 Liquid Glass。

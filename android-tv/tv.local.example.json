@@ -1,0 +1,10 @@
+{
+  "serial": "192.0.2.10:5555",
+  "expectedModel": "COPY_MODEL_FROM_DOCTOR_OUTPUT",
+  "packageId": "works.angel.angel_live_android_tv",
+  "expectedCertificateSha256": "",
+  "githubRepository": "OWNER/REPOSITORY",
+  "trustedBranch": "main",
+  "adbPath": "",
+  "sdkPath": ""
+}

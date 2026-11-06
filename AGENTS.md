@@ -49,6 +49,7 @@ AngelLive 是 iOS/macOS/tvOS 直播聚合应用，插件提供平台能力，宿
 | `Shared/AngelLiveCore/` | 插件运行时/管理、能力、模型、缓存/状态/业务规则、播放恢复、弹幕、投屏模型、收藏、同步、首页数据、开发者控制台 |
 | `Shared/AngelLiveDependencies/` | 播放器及第三方适配：KSPlayer/VLCKit、DLNA、Bugsnag 等 |
 | `Shared/SharedAssets/` | 跨端颜色、图片和资源访问 |
+| `android-tv/` | 本 fork 的独立 Flutter Android TV 兼容客户端、构建与本地 ADB 工具；任务先读该目录 `AGENTS.md` |
 
 依赖只允许宿主 → Dependencies/Core/Assets，Dependencies → Core；Core 不反向依赖宿主或 Dependencies。可复用协议/解析/缓存/状态机/业务放 Core，第三方播放器适配放 Dependencies，导航/窗口/焦点/UIKit/AppKit 桥接留宿主。默认 KSPlayer，只有明确要求时在首次解析前用 `USE_VLC=1` 切到 VLCKit，两者互斥。
 
@@ -97,6 +98,7 @@ Package 测试、宿主构建、UI/设备验收三层分别报告，不能相互
 | 任务 | 必读文档 / Skill |
 | --- | --- |
 | 分派、交接、独立测试、监控运维、指南维护 | [collaboration.md](docs/agents/collaboration.md) |
+| 本 fork 的独立 Android TV 构建、安装或调试 | [android-tv/AGENTS.md](android-tv/AGENTS.md)、[构建说明](android-tv/docs/GITHUB_ACTIONS.md)、[本地设备手册](android-tv/docs/HOME_AI.md)；Android 使用模块内 Flutter/ADB 入口，Apple 宿主仍遵循下方对应流程 |
 | UI 布局/视觉审查/整改 | [ui-visual-gate.md](docs/agents/ui-visual-gate.md)、`axiom-design`，及下方对应 UI 框架 Skill |
 | SwiftUI / UIKit 或桥接 / macOS UI、窗口、菜单 | SwiftUI 先 `axiom-design`、再 `axiom-swiftui`；UIKit/桥接用 `axiom-uikit`；macOS 用 `axiom-macos` |
 | 构建、签名、环境准备、Xcode MCP/工具故障 | [xcode-mcp.md](docs/agents/xcode-mcp.md)；MCP 用 `axiom-xcode-mcp`，环境故障先 `axiom-build` |
