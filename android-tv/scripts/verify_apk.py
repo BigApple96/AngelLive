@@ -19,6 +19,16 @@ def command(args):
     return result.stdout.decode('utf-8', errors='replace')
 
 
+def signing_certificate(output):
+    # SDK tools may identify v3 signers by SDK range instead of signer number.
+    digests = {value.lower() for value in re.findall(
+        r'^Signer[^\r\n]* certificate SHA-256 digest:\s*([0-9a-fA-F]{64})\s*$',
+        output, re.MULTILINE)}
+    if len(digests) != 1:
+        raise RuntimeError('Expected one verified APK signing certificate')
+    return digests.pop()
+
+
 def inspect(apk, sdk=None):
     apk = Path(apk).resolve()
     sdk = Path(sdk or os.environ.get('ANDROID_HOME') or os.environ.get('ANDROID_SDK_ROOT') or '')
@@ -35,9 +45,7 @@ def inspect(apk, sdk=None):
         if not match:
             raise RuntimeError('Required APK metadata is missing')
         return match.group(1)
-    certificate = re.search(r'Signer #1 certificate SHA-256 digest: ([0-9a-fA-F]+)', signing)
-    if not certificate:
-        raise RuntimeError('APK signing certificate is missing')
+    certificate = signing_certificate(signing)
     with zipfile.ZipFile(apk) as archive:
         if archive.testzip():
             raise RuntimeError('APK ZIP CRC failed')
@@ -58,7 +66,7 @@ def inspect(apk, sdk=None):
         'versionName': field(r"versionName='([^']+)'"),
         'versionCode': int(field(r"versionCode='(\d+)'")),
         'minSdk': int(field(r"(?:minSdkVersion|sdkVersion):'(\d+)'")),
-        'abis': abis, 'certificateSha256': certificate.group(1).lower(),
+        'abis': abis, 'certificateSha256': certificate,
         'sourceCommit': os.environ.get('GITHUB_SHA', ''),
         'runId': os.environ.get('GITHUB_RUN_ID', ''),
         'signatureVerified': True, 'zipAligned': True,

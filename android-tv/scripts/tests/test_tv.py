@@ -10,6 +10,26 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import tv
 import ci_prepare
+import verify_apk
+
+
+class SigningToolContract(unittest.TestCase):
+    def test_numbered_and_sdk_range_signer_formats_are_supported(self):
+        for label in ['Signer #1', 'Signer (minSdkVersion=24, maxSdkVersion=2147483647)']:
+            with self.subTest(label=label):
+                output = label + ' certificate SHA-256 digest: ' + 'A' * 64 + '\n'
+                self.assertEqual(verify_apk.signing_certificate(output), 'a' * 64)
+
+    def test_distinct_signing_certificates_are_rejected(self):
+        output = 'Signer #1 certificate SHA-256 digest: ' + 'a' * 64 + '\n'
+        output += 'Signer #2 certificate SHA-256 digest: ' + 'b' * 64 + '\n'
+        with self.assertRaises(RuntimeError):
+            verify_apk.signing_certificate(output)
+
+    def test_source_stamp_cannot_replace_application_signer(self):
+        output = 'Source Stamp Signer certificate SHA-256 digest: ' + 'a' * 64 + '\n'
+        with self.assertRaises(RuntimeError):
+            verify_apk.signing_certificate(output)
 
 
 class InstallContract(unittest.TestCase):
