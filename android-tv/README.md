@@ -4,6 +4,7 @@
 
 ## 从这里开始
 
+- [直接复制给 Codex 的完整任务](../ANDROID_TV_CODEX.md)：目标电视、已核验构建和默认订阅验收。
 - [GitHub 自动构建与签名](docs/GITHUB_ACTIONS.md)：运行 **Android TV APK**，下载 Artifacts。
 - [给家里 AI 的 AGENTS.md](AGENTS.md)：按已授权的目标安装、观察、调试和报告。
 - [家庭设备安装调试手册](docs/HOME_AI.md)：本地配置、ADB 首次授权、下载成功构建和取证。
@@ -13,7 +14,7 @@
 
 插件订阅与校验、分类分页、搜索、房间号或分享链接、收藏与历史、账号 Cookie 导入/插件声明的二维码流程、清晰度/线路切换、请求头继承、缓冲超时重新取流与重连。凭据使用 Android Keystore 加密，插件 JavaScript 在隔离 Worker 中运行。
 
-首次安装需要通过私有构建配置 `TV_PLUGIN_SOURCE_URL` 或应用设置提供用户自己的订阅。公开源码的 `assets/bootstrap.json` 不包含真实订阅；第三方插件按需下载，不随源码或 APK 附带。
+本 fork 已按用户要求配置私有的默认订阅，受信任默认分支的构建会写入 APK。首次启动或保存的订阅地址为空时导入完整 JSON 索引，已有自定义订阅保持不变，数量以订阅为准。公开源码的 `assets/bootstrap.json` 不包含真实订阅；插件 ZIP 按需下载，不随源码或 APK 附带。其他 fork 可自行配置 `TV_PLUGIN_SOURCE_URL` 或在应用设置里提供订阅。
 
 ## 构建与验证
 

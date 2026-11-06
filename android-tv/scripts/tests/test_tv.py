@@ -133,6 +133,12 @@ class BuildConfiguration(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             ci_prepare.prepare({'TV_KEY_ALIAS': 'fixture'})
 
+    def test_preview_can_embed_default_source_without_a_private_signing_key(self):
+        self.assertEqual(ci_prepare.prepare({'TV_PLUGIN_SOURCE_URL': 'https://source.example.invalid/catalog.json'}), 'preview')
+        bootstrap = json.loads((self.root / 'assets/bootstrap.json').read_text())
+        self.assertEqual(bootstrap['sourceURL'], 'https://source.example.invalid/catalog.json')
+        self.assertFalse((self.root / 'android/key.properties').exists())
+
     def test_signed_mode_requires_all_secrets(self):
         with self.assertRaises(RuntimeError):
             ci_prepare.prepare({'REQUESTED_BUILD': 'signed'})

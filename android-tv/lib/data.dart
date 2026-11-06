@@ -144,7 +144,10 @@ class AppStore extends ChangeNotifier {
     final defaults = object(
       jsonDecode(await rootBundle.loadString('assets/bootstrap.json')),
     );
-    sourceURL = string(settings['sourceURL'] ?? defaults['sourceURL']);
+    final savedSourceURL = string(settings['sourceURL']).trim();
+    sourceURL = savedSourceURL.isNotEmpty
+        ? savedSourceURL
+        : string(defaults['sourceURL']).trim();
     favorites = array(settings['favorites']).map(object).toList();
     history = array(settings['history']).map(object).toList();
     final cached = object(settings['index']);

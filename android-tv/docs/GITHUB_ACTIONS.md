@@ -10,6 +10,8 @@ Artifacts 是构建产物，不是应用商店发布；本工作流不创建 Rel
 
 ## 签名与默认插件源
 
+本 fork 已按用户要求配置 `TV_PLUGIN_SOURCE_URL`。它与固定签名配置独立：即使当前生成预览版，受信任默认分支构建也会写入默认订阅。首次启动或已保存地址为空时导入完整索引，已有自定义订阅保持不变。直接复制给 Codex 的任务见仓库根 `ANDROID_TV_CODEX.md`。
+
 在仓库 Settings → Secrets and variables → Actions 配置：
 
 | Secret | 内容 |
