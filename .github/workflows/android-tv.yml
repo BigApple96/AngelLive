@@ -87,6 +87,7 @@ jobs:
           python3 scripts/verify_apk.py "dist/AngelLive-TV-${CI_BUILD_MODE}.apk" --expected-package "$CI_PACKAGE_ID" --output dist/artifact.json
           cp LICENSE dist/LICENSE.txt
           cp THIRD_PARTY_NOTICES.md dist/THIRD_PARTY_NOTICES.md
+          cp -R third_party_licenses dist/third_party_licenses
           cd dist
           sha256sum ./*.apk artifact.json > SHA256SUMS.txt
       - name: Upload APK and verification metadata
