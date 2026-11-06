@@ -1,6 +1,6 @@
 # Angel Live
 
-[![CI](https://github.com/pcccccc/AngelLive/actions/workflows/ci.yml/badge.svg)](https://github.com/pcccccc/AngelLive/actions/workflows/ci.yml)
+[![Android TV APK](https://github.com/BigApple96/AngelLive/actions/workflows/android-tv.yml/badge.svg)](https://github.com/BigApple96/AngelLive/actions/workflows/android-tv.yml)
 
 **本 fork 的安卓电视入口：[复制给 Codex 的安装调试任务](ANDROID_TV_CODEX.md) · [Android TV APK 构建下载](https://github.com/BigApple96/AngelLive/actions/workflows/android-tv.yml)。只构建安卓电视客户端。**
 
